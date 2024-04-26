@@ -1,44 +1,57 @@
-
 import java.io.*;
 import java.util.*;
 
 public class BinarySearch {
-    private static List<Integer> arr = new ArrayList<Integer>();
+    private static int[] arr;
     private static int occurrence;
     
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner in = new Scanner(new File("numbers.txt"));
-        load(in);
-        System.out.println(search(51216352));
+        load();
+        System.out.println(search(arr, 51216352));
         System.out.println(occurrence);
         System.out.println();
 
-        System.out.println(search(198313119));
+        System.out.println(search(arr, 198313119));
         System.out.println(occurrence);
         System.out.println();
 
-        System.out.println(search(196614208));
+        System.out.println(search(arr, 196614208));
         System.out.println(occurrence);
         
     }
 
     // simple load method to fill array with numbers from file
-    private static void load(Scanner scan){
+    private static void load() throws FileNotFoundException {
+                                // change for file
+        File number = new File("numbers.txt");
+        Scanner scan = new Scanner(number);
+        int index_count = 0;
         while (scan.hasNextInt()){
-            arr.add(scan.nextInt());
+            index_count++;
+            scan.nextInt();
         }
+        arr = new int[index_count];
+        scan.close();
+        
+        Scanner scan2 = new Scanner(number);
+        index_count = -1;
+        while (scan2.hasNextInt()){
+            index_count++;
+            arr[index_count] = scan2.nextInt();
+        }
+        scan2.close();
     }
 
     // basic binary search over pre sorted array
     // splits given index parameters in half, and either goes 
-    private static int search(int value) {
+    private static int search(int[] arr, int value) {
         int low = 0; // init lowest index 
-        int high = arr.size(); // init highest index
-        occurrence = 0; 
+        int high = arr.length - 1; // init highest index
+        occurrence = 0;
         while (low <= high) { // while there are indexes to be searched
             occurrence++;
             int mid = (low + high) / 2; // lowest + highest / 2 to get the middle of the 2
-            int guess = arr.get(mid); 
+            int guess = arr[mid]; 
             if (guess == value){
                 return mid;
             }
